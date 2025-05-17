@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Dress Order Tracker</title>
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    #taskInput {
+      padding: 10px;
+      font-size: 1rem;
+      width: 60%;
+      margin-right: 10px;
+    }
+
+    #addTaskButton {
+      padding: 10px;
+      font-size: 1rem;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #addTaskButton:hover {
+      background-color: #444;
+    }
+
+    #taskList {
+      margin-top: 20px;
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .task-item span {
+      flex-grow: 1;
+      margin-left: 10px;
+    }
+
+    .task-item input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .task-item button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .task-item button:hover {
+      background-color: darkred;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #eee;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Custom Dress Order Tracker</h1>
+    <nav>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Manage Your Custom Orders</h2>
+      <input type="text" id="taskInput" placeholder="Add new task..." />
+      <button id="addTaskButton">Add Task</button>
+      <ul id="taskList"></ul>
+    </section>
+  </main>
+
+  <script >
+    document.addEventListener("DOMContentLoaded", function () {
+  const taskInput = document.getElementById("taskInput");
+  const addTaskButton = document.getElementById("addTaskButton");
+  const taskList = document.getElementById("taskList");
+
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+
+  function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+
+
+  function createTaskElement(task, index) {
+    const li = document.createElement("li");
+    li.className = "task-item";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = task.completed;
+
+    const span = document.createElement("span");
+    span.textContent = task.text;
+    if (task.completed) {
+      span.style.textDecoration = "line-through";
+    }
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+
+ 
+    checkbox.addEventListener("change", function () {
+      task.completed = checkbox.checked;
+      span.style.textDecoration = checkbox.checked ? "line-through" : "none";
+      saveTasks();
+    });
+
+   
+    deleteBtn.addEventListener("click", function () {
+      tasks.splice(index, 1);         
+      saveTasks();                  
+      renderTasks();                 
+    });
+
+    li.appendChild(checkbox);
+    li.appendChild(span);
+    li.appendChild(deleteBtn);
+    taskList.appendChild(li);
+  }
+
+
+  function renderTasks() {
+    taskList.innerHTML = ""; 
+    tasks.forEach((task, index) => createTaskElement(task, index));
+  }
+
+
+  addTaskButton.addEventListener("click", function () {
+    const text = taskInput.value.trim();
+    if (text === "") return;
+
+    const newTask = { text, completed: false };
+    tasks.push(newTask);
+    saveTasks();
+    renderTasks();
+    taskInput.value = "";
+  });
+
+
+  renderTasks();
+});
+
+  </script>
+</body>
+</html>

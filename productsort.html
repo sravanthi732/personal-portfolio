@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Page - Customised Dresses</title>
+<style>
+  
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(185, 248, 227);
+  }
+
+  header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  nav a {
+    color: white;
+    margin-left: 1rem;
+    text-decoration: none;
+  }
+
+  main {
+    padding: 2rem;
+  }
+
+  #filters {
+    margin-bottom: 1.5rem;
+  }
+
+  #filters label,
+  #filters select {
+    margin-right: 1rem;
+  }
+
+  #productList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  footer {
+    background-color: #f0f0f0;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+</style>
+
+
+
+</style>
+</head>
+<body>
+  <header>
+    <h1>Customised Dresses</h1>
+    <nav>
+      
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Browse Our Products</h2>
+      
+      <div id="filters">
+        <label for="categoryFilter">Category:</label>
+        <select id="categoryFilter">
+          <option value="">All Categories</option>
+          <option value="Evening">Evening Dresses</option>
+          <option value="Casual">Casual Dresses</option>
+          <option value="Wedding">Wedding Dresses</option>
+        </select>
+
+        <label for="priceFilter">Price:</label>
+        <select id="priceFilter">
+          <option value="">Any Price</option>
+          <option value="low">Low to High</option>
+          <option value="high">High to Low</option>
+        </select>
+
+        <label for="ratingFilter">Rating:</label>
+        <select id="ratingFilter">
+          <option value="">Any Rating</option>
+          <option value="1">1 Star & Above</option>
+          <option value="2">2 Stars & Above</option>
+          <option value="3">3 Stars & Above</option>
+          <option value="4">4 Stars & Above</option>
+          <option value="5">5 Stars</option>
+        </select>
+      </div>
+
+      <div id="productList">
+       
+      </div>
+    </section>
+  </main>
+
+  
+
+  <script>
+
+const products = [
+  { id: 1, name: "Evening Dress ", category: "Evening",image: "images/k.jpg", price: 150, rating: 4 },
+  { id: 2, name: "Casual Dress ", category: "Casual", price: 80, rating: 5 },
+  { id: 3, name: "Wedding Dress ", category: "Wedding", price: 200, rating: 3 },
+  { id: 4, name: "Casual Dress ", category: "Casual", price: 70, rating: 4 },
+  { id: 5, name: "Evening Dress ", category: "Evening", price: 180, rating: 5 },
+  { id: 6, name: "Wedding Dress ", category: "Wedding", price: 250, rating: 2 },
+  {
+    name: "Elegant Evening Dress",
+    category: "Evening",
+    price: 120,
+    rating: 4,
+   
+  },
+];
+
+const categoryFilter = document.getElementById("categoryFilter");
+const priceFilter = document.getElementById("priceFilter");
+const ratingFilter = document.getElementById("ratingFilter");
+const productList = document.getElementById("productList");
+
+
+function renderProducts(filteredProducts) {
+  productList.innerHTML = "";
+  filteredProducts.forEach(product => {
+    const productItem = document.createElement("div");
+    productItem.classList.add("product-item");
+
+    productItem.innerHTML = `
+      <h3>${product.name}</h3>
+      <p>Category: ${product.category}</p>
+      <p>Price: $${product.price}</p>
+      <p>Rating: ${"★".repeat(product.rating)}${"☆".repeat(5 - product.rating)}</p>
+    `;
+    
+    productList.appendChild(productItem);
+  });
+}
+
+
+function applyFilters() {
+  let filteredProducts = products;
+
+  
+  if (categoryFilter.value) {
+    filteredProducts = filteredProducts.filter(product => product.category === categoryFilter.value);
+  }
+
+  if (priceFilter.value === "low") {
+    filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (priceFilter.value === "high") {
+    filteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
+  }
+
+ 
+  if (ratingFilter.value) {
+    filteredProducts = filteredProducts.filter(product => product.rating >= parseInt(ratingFilter.value));
+  }
+
+  renderProducts(filteredProducts);
+}
+categoryFilter.addEventListener("change", applyFilters);
+priceFilter.addEventListener("change", applyFilters);
+ratingFilter.addEventListener("change", applyFilters);
+renderProducts(products);
+ </script>
+</body>
+</html>
